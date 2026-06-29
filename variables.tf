@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region where the POC is deployed."
   type        = string
-  default     = "us-east-1"
+  default     = "us-west-2"
 }
 
 variable "project_name" {
@@ -26,11 +26,6 @@ variable "az_count" {
   description = "Number of Availability Zones to use."
   type        = number
   default     = 3
-
-  validation {
-    condition     = var.az_count >= 2 && var.az_count <= 3
-    error_message = "az_count must be 2 or 3."
-  }
 }
 
 variable "allowed_ingress_cidrs" {
@@ -42,17 +37,11 @@ variable "allowed_ingress_cidrs" {
 variable "domain_name" {
   description = "DNS name for the application. Terraform creates and validates an ACM certificate for this name."
   type        = string
-
-  validation {
-    condition     = length(var.domain_name) > 0 && can(regex("^[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", var.domain_name))
-    error_message = "domain_name must be a valid DNS name, for example app.example.com."
-  }
 }
 
-variable "hosted_zone_name" {
-  description = "Optional Route53 hosted zone name. If empty, Terraform derives the parent zone from domain_name, for example example.com from app.example.com."
+variable "hosted_zone_id" {
+  description = "Route53 hosted zone ID where DNS records are created."
   type        = string
-  default     = ""
 }
 
 variable "instance_type_app" {
