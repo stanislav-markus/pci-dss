@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euxo pipefail
+
+dnf update -y
+dnf install -y nginx curl
+
+curl --fail --silent --show-error https://example.com/ >/opt/example-package.marker
+curl --fail --silent --show-error https://secureweb.com/ >/opt/secureweb-connectivity.marker || true
+
+cat >/usr/share/nginx/html/index.html <<'HTML'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PCI POC App</title>
+</head>
+<body>
+  <h1>PCI POC App</h1>
+  <p>Application instance is reachable only through the ALB.</p>
+</body>
+</html>
+HTML
+
+cat >/usr/share/nginx/html/healthz <<'HEALTH'
+ok
+HEALTH
+
+systemctl enable --now nginx
