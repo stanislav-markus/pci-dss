@@ -95,32 +95,6 @@ terraform plan
 terraform apply
 ```
 
-## GitHub Actions
-
-Workflow performs:
-
--   `terraform validate` on pull requests and pushes
--   `terraform plan` using GitHub OIDC authentication
--   `terraform apply` only via manual workflow dispatch
-
-Required repository variables:
-
-``` text
-AWS_REGION
-TF_VAR_DOMAIN_NAME
-TF_VAR_ALLOWED_INGRESS_CIDRS
-TF_VAR_HOSTED_ZONE_ID
-```
-
-Required secret:
-
-``` text
-AWS_ROLE_TO_ASSUME
-```
-
-For shared environments configure remote Terraform state using S3
-backend.
-
 ## Network Security Design
 
 Security groups enforce workload isolation:
